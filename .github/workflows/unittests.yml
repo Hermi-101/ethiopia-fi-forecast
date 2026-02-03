@@ -1,0 +1,15 @@
+name: Project Checks
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install Dependencies
+        run: pip install pandas
+      - name: Smoke Test Data
+        run: python -c "import pandas as pd; pd.read_csv('data/raw/ethiopia_fi_unified_data.csv')"
