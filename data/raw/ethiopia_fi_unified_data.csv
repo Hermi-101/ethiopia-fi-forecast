@@ -1,6 +1,11 @@
-record_type,pillar,indicator,indicator_code,value_numeric,observation_date,source_name,confidence
-observation,INFRASTRUCTURE,Total ATMs,ATM_COUNT,7858.0,2023-12-31,IMF FAS / NBE,high
-observation,INFRASTRUCTURE,Electricity access rate (Tier 1+),ELEC_ACCESS,44.0,2025-01-01,World Bank MTF,high
-observation,INFRASTRUCTURE,Cellular mobile connections (millions),MOBILE_CONN,85.4,2025-01-01,GSMA Intelligence,high
-observation,AFFORDABILITY,1GB Data Cost (% of monthly income),DATA_COST_GNI,2.1,2023-12-31,A4AI / ITU,high
-target,INFRASTRUCTURE,Electricity access goal 2030,ELEC_TARGET_2030,75.0,2030-12-31,Government of Ethiopia,high
+record_type,pillar,indicator,indicator_code,value_numeric,observation_date,source_name,confidence,parent_id,related_indicator,impact_direction,impact_magnitude,lag_months
+observation,INFRASTRUCTURE,Total ATMs,ATM_COUNT,7858.0,2023-12-31,IMF FAS / NBE,high,,,,,
+observation,INFRASTRUCTURE,Electricity access rate (Tier 1+),ELEC_ACCESS,44.0,2025-01-01,World Bank MTF,high,,,,,
+observation,INFRASTRUCTURE,Cellular mobile connections (millions),MOBILE_CONN,85.4,2025-01-01,GSMA Intelligence,high,,,,,
+observation,AFFORDABILITY,1GB Data Cost (% of monthly income),DATA_COST_GNI,2.1,2023-12-31,A4AI / ITU,high,,,,,
+target,INFRASTRUCTURE,Electricity access goal 2030,ELEC_TARGET_2030,75.0,2030-12-31,Government of Ethiopia,high,,,,,
+event,USAGE,Telebirr Launch,,,2021-05-11,,,,,,,
+event,ACCESS,M-Pesa Launch,,,2023-08-15,,,,,,,
+event,ACCESS,Safaricom Entry,,,2022-10-06,,,,,,,
+impact_link,,,,,,,,5.0,ACC_MM_ACCOUNT,positive,high,6.0
+impact_link,,,,,,,,6.0,ACC_OWNERSHIP,positive,medium,12.0
