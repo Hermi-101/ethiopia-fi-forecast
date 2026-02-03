@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+df = load_data("data/raw/ethiopia_fi_unified_data.csv")
+
 # Page Config
 st.set_page_config(page_title="Ethiopia Financial Inclusion Dashboard", layout="wide")
 
@@ -51,7 +53,7 @@ elif page == "Forecasts":
     
     st.plotly_chart(fig, use_container_width=True)
     st.table(df)
-
+    
 # 3. INCLUSION PROJECTIONS
 elif page == "Inclusion Projections":
     st.title("Progress Toward 60% Inclusion Target")
@@ -59,3 +61,21 @@ elif page == "Inclusion Projections":
     target = 60
     st.progress(progress/target)
     st.write(f"Ethiopia is currently at {progress}%. To reach the {target}% target, the 'Optimistic' scenario must be achieved.")
+elif page == "Trends Analysis":
+    st.title("Interactive Trend Exploration")
+    
+    # 1. Interactive Filtering
+    indicators = st.multiselect(
+        "Select Indicators to Compare", 
+        options=df['indicator_code'].unique(),
+        default=['ACC_OWNERSHIP', 'ACC_MM_ACCOUNT']
+    )
+    
+    # 2. Channel Comparison Chart
+    plot_df = df[df['indicator_code'].isin(indicators)]
+    fig = px.line(plot_df, x='observation_date', y='value_numeric', color='indicator_code',
+                 title="Comparison of Access vs. Usage Channels")
+    st.plotly_chart(fig)
+    
+    # 3. Slowdown Highlight
+    st.info("Notice the flattening of the ACC_OWNERSHIP curve after 2021, representing the +3pp slowdown.")    
