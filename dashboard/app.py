@@ -1,7 +1,16 @@
+import sys
+import os
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
+import plotly.graph_objects as go  # <--- THIS WAS MISSING
+
+# Add the project root (one level up from dashboard) to the python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# NOW you can import from src
+
+from src.data_loader import load_data
 
 df = load_data("data/raw/ethiopia_fi_unified_data.csv")
 
@@ -64,18 +73,29 @@ elif page == "Inclusion Projections":
 elif page == "Trends Analysis":
     st.title("Interactive Trend Exploration")
     
-    # 1. Interactive Filtering
+    # 1. Get all available codes from your data
+    all_indicators = df['indicator_code'].unique().tolist()
+    
+    # 2. Define your desired defaults, but ONLY if they exist in the data
+    desired_defaults = ['ACC_OWNERSHIP', 'ACC_MM_ACCOUNT', 'ATM_COUNT', 'MOBILE_CONN']
+    actual_defaults = [i for i in desired_defaults if i in all_indicators]
+    
+    # 3. If your desired ones aren't found, just pick the first two available indicators
+    if not actual_defaults and len(all_indicators) > 0:
+        actual_defaults = all_indicators[:2]
+
+    # 4. Create the widget safely
     indicators = st.multiselect(
         "Select Indicators to Compare", 
-        options=df['indicator_code'].unique(),
-        default=['ACC_OWNERSHIP', 'ACC_MM_ACCOUNT']
+        options=all_indicators,
+        default=actual_defaults
     )
     
-    # 2. Channel Comparison Chart
-    plot_df = df[df['indicator_code'].isin(indicators)]
-    fig = px.line(plot_df, x='observation_date', y='value_numeric', color='indicator_code',
-                 title="Comparison of Access vs. Usage Channels")
-    st.plotly_chart(fig)
-    
-    # 3. Slowdown Highlight
-    st.info("Notice the flattening of the ACC_OWNERSHIP curve after 2021, representing the +3pp slowdown.")    
+    # Filter and plot
+    if indicators:
+        plot_df = df[df['indicator_code'].isin(indicators)]
+        fig = px.line(plot_df, x='observation_date', y='value_numeric', color='indicator_code',
+                     markers=True, title="Comparison of Financial Inclusion Indicators")
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("Please select at least one indicator to view the trend.")
